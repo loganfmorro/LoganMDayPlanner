@@ -1,6 +1,7 @@
 body {
     /* color for background */
-    background-color: rgb(87, 0, 145);
+    background-image: url("https://wonderfulengineering.com/wp-content/uploads/2014/09/Purple-wallpaper-7.jpg");
+    background-size: contain;
   
     /* custom font */
     font-family: 'Dosis', sans-serif;
@@ -47,10 +48,12 @@ body {
   }
   
   #plannerContainer {
-    background-color:  rgb(48, 0, 80);
+    background-color:  rgba(48, 0, 80, 0.555);
+    border: solid;
+    border-color:  rgb(115, 77, 139);
     padding: 30px; 
-    margin-top: 50px;
-    margin-bottom: 80px;
+    margin-top: 40px;
+    margin-bottom: 100px;
     border-radius: 15px;
     
     /* provide spaceing around the text */
@@ -109,11 +112,12 @@ body {
   }
   
   .footer {
-    background-color: rgb(100, 99, 99);
+    background-color: rgb(48, 0, 80);
     height: 10%;
     border-top: solid;
+    border-bottom: none;
     border-top-color: rgb(134, 134, 134);;  
-    border-top-width: 5px;
+    border-top-width: 3px;
   }
   
   .footer-text, .header-text {

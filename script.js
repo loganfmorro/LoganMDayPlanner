@@ -63,14 +63,17 @@ $(document).ready(function() {
     
       // create timeBox element (contains time)
       const $timeBoxSpn = $('<span>');
-      // can use this to get value
+      // get value from local storage
       $timeBoxSpn.attr('class','timeBox');
       
       // format hours for display
       let displayHour = 0;
       let ampm = "";
-      if (hour > 12) { 
+      if (hour >= 12) { 
         displayHour = hour - 12;
+        if (displayHour === 0){
+            displayHour = 12
+        }
         ampm = "pm";
       } else {
         displayHour = hour;
@@ -140,8 +143,8 @@ $(document).ready(function() {
         if (test) { console.log("greaterthan"); }
         $hourRow.css("background-color","lightgreen")
       } else {
-        if (test) { console.log("eqaul"); }
-        $hourRow.css("background-color","tomato")
+        if (test) { console.log("equal"); }
+        $hourRow.css("background-color","violet")
       }
     };
   
