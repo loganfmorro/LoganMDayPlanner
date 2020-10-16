@@ -1,72 +1,51 @@
 $(document).ready(function() {
-  
-    // test flag
     const test = false;
-  
-    // get times from moment
     const now = moment().format('MMMM Do YYYY');
-  
-    // commented out for test in non-standard hours
     let nowHour24 = moment().format('H');
     let nowHour12 = moment().format('h');
   
-    // set times for tesitng after hours
     if (test) {
       nowHour24 = 13;
       nowHour12 = 1;
     }
-  
+    //Header with Today's date
     let $dateHeading = $('#navbar-subtitle');
     $dateHeading.text(now);
-    
-    // change description here - none
+
+    //Storing and Saving Daily Plans
     const saveIcon = "./images/save-regular.svg"; 
-  
-    // Get stored to-do's from localStorage then parsing the JSON string to an object
     let storedPlans = JSON.parse(localStorage.getItem("storedPlans"));
-  
     if (test) { console.log(storedPlans); }
   
-    // If plans were retrieved from localStorage, update the plan array to it
     if (storedPlans !== null) {
       planTextArr = storedPlans;
     } else {
-      // example text to let user know to type in box, also to take lunch
       planTextArr = new Array(9);
-      planTextArr[4] = "Take a Lunch Break!";
+      planTextArr[4] = "Take a Lunch Break!"; //example text to show user to type
     }
   
-    if (test) { console.log("full array of planned text",planTextArr); }
-  
-    // set variable referencing planner element
+    if (test) { console.log("full array of planner text",planTextArr); }
     let $plannerDiv = $('#plannerContainer');
-    // clear existing elements
     $plannerDiv.empty();
-  
+    
+    //Setting the time on the left side of the planner
     if (test) { console.log("current time",nowHour12); }
-  
-  
-    // build calendar by row for fix set of hours
     for (let hour = 9; hour <= 17; hour++) {
-      // index for array use offset from hour
       let index = hour - 9;
       
-      // build row components
+      //Upon loading the page, this creates each time slot/planning space
       let $rowDiv = $('<div>');
       $rowDiv.addClass('row');
       $rowDiv.addClass('plannerRow');
       $rowDiv.attr('hour-index',hour);
     
-      // Start building Time box portion of row
       let $col2TimeDiv = $('<div>');
       $col2TimeDiv.addClass('col-md-2');
     
-      // create timeBox element (contains time)
       const $timeBoxSpn = $('<span>');
-      // get value from local storage
       $timeBoxSpn.attr('class','timeBox');
       
-      // format hours for display
+      //If function to set AM and PM variables
       let displayHour = 0;
       let ampm = "";
       if (hour >= 12) { 
@@ -80,63 +59,40 @@ $(document).ready(function() {
         ampm = "am";
       }
       
-      // populate timeBox with time
+      //Time portion of left side
       $timeBoxSpn.text(`${displayHour} ${ampm}`);
-  
-      // insert into col inset into timebox
       $rowDiv.append($col2TimeDiv);
       $col2TimeDiv.append($timeBoxSpn);
-      // STOP building Time box portion of row
-  
-      // START building input portion of row
-      // build row components
+
+      //Input portion of container
       let $dailyPlanSpn = $('<input>');
-  
       $dailyPlanSpn.attr('id',`input-${index}`);
       $dailyPlanSpn.attr('hour-index',index);
       $dailyPlanSpn.attr('type','text');
       $dailyPlanSpn.attr('class','dailyPlan');
-  
-      // access index from data array for hour 
       $dailyPlanSpn.val( planTextArr[index] );
-      
-      // create col to control width
       let $col9IptDiv = $('<div>');
       $col9IptDiv.addClass('col-md-9');
-  
-      // add col width and row component to row
       $rowDiv.append($col9IptDiv);
       $col9IptDiv.append($dailyPlanSpn);
-      // STOP building Time box portion of row
   
-      // START building save portion of row
+      // Save portion of the right side of container
       let $col1SaveDiv = $('<div>');
       $col1SaveDiv.addClass('col-md-1');
-  
       let $saveBtn = $('<i>');
       $saveBtn.attr('id',`saveid-${index}`);
       $saveBtn.attr('save-id',index);
       $saveBtn.attr('class',"far fa-save saveIcon");
-      
-      // add col width and row component to row
       $rowDiv.append($col1SaveDiv);
       $col1SaveDiv.append($saveBtn);
-      // STOP building save portion of row
   
-      // set row color based on time
+      // Color coding the rows based on the current time
       updateRowColor($rowDiv, hour);
-      
-      // add row to planner container
       $plannerDiv.append($rowDiv);
     };
-  
-    // function to update row color based on current time
     function updateRowColor ($hourRow,hour) { 
-  
       if (test) { console.log("rowColor ",nowHour24, hour); }
-  
       if ( hour < nowHour24) {
-        // $hourRow.css('')
         if (test) { console.log("lessThan"); }
         $hourRow.css("background-color","lightgrey")
       } else if ( hour > nowHour24) {
@@ -148,40 +104,28 @@ $(document).ready(function() {
       }
     };
   
-    // saves to local storage, onclick function to listen for user clicks on plan area
+    // Function to save the user input for their planning
     $(document).on('click','i', function(event) {
       event.preventDefault();  
   
       if (test) { console.log('click pta before '+ planTextArr); }
-  
       let $index = $(this).attr('save-id');
-  
       let inputId = '#input-'+$index;
       let $value = $(inputId).val();
-  
       planTextArr[$index] = $value;
-  
-  
       if (test) { console.log('value ', $value); }
       if (test) { console.log('index ', $index); }
       if (test) { console.log('click pta after '+ planTextArr); }
-  
-      // remove shawdow pulse class
       $(`#saveid-${$index}`).removeClass('shadowPulse');
       localStorage.setItem("storedPlans", JSON.stringify(planTextArr));
     });  
     
-    // function to color save button on change of input
+    // If the user changes their input, this function will save the color change
     $(document).on('change','input', function(event) {
       event.preventDefault();  
       if (test) { console.log('onChange'); }
       if (test) { console.log('id', $(this).attr('hour-index')); }
-  
-      // neeed to check if user clicked save button
-  
       let i = $(this).attr('hour-index');
-  
-      // add shawdow pulse class
       $(`#saveid-${i}`).addClass('shadowPulse');
     });
   });
